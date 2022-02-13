@@ -38,6 +38,9 @@ if [ -z $REPO_URL ]; then
   REPO_URL=${GITHUBPROXY}https://github.com/cdle/sillyGirl.git
 fi
 
+if [ -z $EXTEND_REPO_URL ]; then
+  EXTEND_REPO_URL=${GITHUBPROXY}https://github.com/ShiShuMo/jd_cookie.git
+fi
 
 if ! type git  >/dev/null 2>&1; then
   echo "正在安装git..."
@@ -56,6 +59,18 @@ else
   cd $CODE_DIR && git reset --hard && git pull
 fi
 
+TMP_EXTEND_REPO_NAME=${EXTEND_REPO_URL##*/}
+EXTEND_REPO_NAME=${TMP_EXTEND_REPO_NAME%.*}
+
+
+if [ ! -d $CODE_DIR/develop/${EXTEND_REPO_NAME}/.git ]; then
+  echo "扩展 ${EXTEND_REPO_NAME} 代码目录为空, 开始clone代码..."
+  git clone $EXTEND_REPO_URL  $CODE_DIR/develop/${EXTEND_REPO_NAME}
+else
+  echo "扩展 ${EXTEND_REPO_NAME} 代码已存在"
+  echo "更新扩展 ${EXTEND_REPO_NAME} 代码"
+  cd $CODE_DIR/develop/${EXTEND_REPO_NAME} && git reset --hard && git pull
+fi
 
 if [ ! -d $CODE_DIR/develop/onebyone/.git ]; then
   echo "扩展 一对一推送不存在，开始clone代码..."
