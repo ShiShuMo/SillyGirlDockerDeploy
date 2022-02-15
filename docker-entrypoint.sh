@@ -36,17 +36,17 @@ fi
 
 if [ ! -f $CODE_DIR/sillyGirl ]; then
   echo "sillyGirl 不存在  添加 sillyGirl"
-  cd $CODE_DIR && wget -O sillyGirl ${GITHUBPROXY}https://github.com/cdle/sillyGirl/releases/download/main/sillyGirl_linux_amd64
+  cd $CODE_DIR && wget -O sillyGirl ${GITHUBPROXY}https://github.com/cdle/sillyGirl/releases/download/main/sillyGirl_linux_amd64 && chmod 777 sillyGirl
   
 else
   echo "sillyGirl 已存在  备份 sillyGirl"
   cd $CODE_DIR && mv sillyGirl sillyGirl.bak
   echo "下载最新 sillyGirl"
-  cd $CODE_DIR && wget -O sillyGirl ${GITHUBPROXY}https://github.com/cdle/sillyGirl/releases/download/main/sillyGirl_linux_amd64
+  cd $CODE_DIR && wget -O sillyGirl ${GITHUBPROXY}https://github.com/cdle/sillyGirl/releases/download/main/sillyGirl_linux_amd64 && chmod 777 sillyGirl
 fi
 if [ ! -f $CODE_DIR/sillyGirl ]; then
   echo "远程获取sillyGirl失败，从备份恢复"
-  cd $CODE_DIR && cp sillyGirl.bak sillyGirl
+  cd $CODE_DIR && cp sillyGirl.bak sillyGirl && chmod 777 sillyGirl
 fi
 
 
