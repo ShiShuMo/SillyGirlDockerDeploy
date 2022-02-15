@@ -18,7 +18,7 @@ fi
 
 
 if [ "$ENABLE_GITHUBPROXY" = "true" ]; then
-   GITHUBPROXY=https://git.metauniverse-cn.com/
+   GITHUBPROXY=https://gh.52mss.cf/
    echo "启用 github 加速 ${GITHUBPROXY}"
 else
   echo "未启用 github 加速"
@@ -34,14 +34,6 @@ else
 fi
 
 
-if [ -z $REPO_URL ]; then
-  REPO_URL=${GITHUBPROXY}https://github.com/cdle/sillyGirl.git
-fi
-
-if [ -z $EXTEND_REPO_URL ]; then
-  EXTEND_REPO_URL=${GITHUBPROXY}https://github.com/ShiShuMo/jd_cookie.git
-fi
-
 if ! type git  >/dev/null 2>&1; then
   echo "正在安装git..."
   apk add git
@@ -50,74 +42,20 @@ else
 fi
 
 
-if [ ! -d $CODE_DIR/.git ]; then
-  echo "sillyGirl 核心代码目录为空, 开始clone代码..."
-  git clone $REPO_URL  $CODE_DIR
-else 
-  echo "sillyGirl 核心代码已存在"
-  echo "更新 sillyGirl 核心代码"
-  cd $CODE_DIR && git reset --hard && git pull
-fi
-
-TMP_EXTEND_REPO_NAME=${EXTEND_REPO_URL##*/}
-EXTEND_REPO_NAME=${TMP_EXTEND_REPO_NAME%.*}
-
-
-if [ ! -d $CODE_DIR/develop/${EXTEND_REPO_NAME}/.git ]; then
-  echo "扩展 ${EXTEND_REPO_NAME} 代码目录为空, 开始clone代码..."
-  git clone $EXTEND_REPO_URL  $CODE_DIR/develop/${EXTEND_REPO_NAME}
-else
-  echo "扩展 ${EXTEND_REPO_NAME} 代码已存在"
-  echo "更新扩展 ${EXTEND_REPO_NAME} 代码"
-  cd $CODE_DIR/develop/${EXTEND_REPO_NAME} && git reset --hard && git pull
-fi
-
-if [ ! -d $CODE_DIR/develop/onebyone/.git ]; then
-  echo "扩展 一对一推送不存在，开始clone代码..."
-  git clone ${GITHUBPROXY}https://github.com/ShiShuMo/onebyone $CODE_DIR/develop/onebyone
-else
-  echo "扩展 一对一推送已存在，开始更新代码..."
-  cd $CODE_DIR/develop/onebyone && git reset --hard && git pull
-fi
-
-
-if [ -f $CONF_DIR/dev.go ]; then
-  cat $CONF_DIR/dev.go > $CODE_DIR/dev.go
-fi
-
-
 if [ ! -f $CODE_DIR/dev.go ]; then
   echo "dev.go 不存在  添加 dev.go"
-  cd $CODE_DIR && wget -O dev.go ${GITHUBPROXY}https://raw.githubusercontent.com/ShiShuMo/SillyGirlDockerDeploy/main/dev.go
+  cd $CODE_DIR && wget -O sillyGirl ${GITHUBPROXY}https://github.com/cdle/sillyGirl/releases/download/main/sillyGirl_linux_amd64
+  
 else
   echo "dev.go 已存在  备份 dev.go"
   cd $CODE_DIR && mv dev.go dev.go.bak
   echo "下载最新 dev.go"
-  cd $CODE_DIR && wget -O dev.go ${GITHUBPROXY}https://raw.githubusercontent.com/ShiShuMo/SillyGirlDockerDeploy/main/dev.go
+  cd $CODE_DIR && wget -O sillyGirl ${GITHUBPROXY}https://github.com/cdle/sillyGirl/releases/download/main/sillyGirl_linux_amd64
 fi
 if [ ! -f $CODE_DIR/dev.go ]; then
   echo "远程获取dev.go失败，从备份恢复"
   cd $CODE_DIR && cp dev.go.bak dev.go
 fi
-
-if [ ! -f $CONF_DIR/sets.conf ]; then
-  echo "sets.conf 不存在，添加sets.conf"
-  cd $CONF_DIR &&  wget -O sets.conf ${GITHUBPROXY}https://raw.githubusercontent.com/ShiShuMo/SillyGirlDockerDeploy/main/sets.conf
-else
-  echo "sets.conf已存在"
-fi
-
-
-if [ ! -f $CONF_DIR/userScript.sh ]; then
-  echo "userScript.sh 不存在，不执行用户自定义脚本"
-else
-  echo "userScript.sh 存在，执行用户自定义脚本"
-  sh $CONF_DIR/userScript.sh
-fi
-
-
-echo "开始编译..."
-cd $CODE_DIR && go build
 
 
 echo "启动"
