@@ -34,27 +34,19 @@ else
 fi
 
 
-if ! type git  >/dev/null 2>&1; then
-  echo "正在安装git..."
-  apk add git
-else 
-  echo "git已安装"
-fi
-
-
-if [ ! -f $CODE_DIR/dev.go ]; then
-  echo "dev.go 不存在  添加 dev.go"
+if [ ! -f $CODE_DIR/sillyGirl ]; then
+  echo "sillyGirl 不存在  添加 sillyGirl"
   cd $CODE_DIR && wget -O sillyGirl ${GITHUBPROXY}https://github.com/cdle/sillyGirl/releases/download/main/sillyGirl_linux_amd64
   
 else
-  echo "dev.go 已存在  备份 dev.go"
-  cd $CODE_DIR && mv dev.go dev.go.bak
-  echo "下载最新 dev.go"
+  echo "sillyGirl 已存在  备份 sillyGirl"
+  cd $CODE_DIR && mv sillyGirl sillyGirl.bak
+  echo "下载最新 sillyGirl"
   cd $CODE_DIR && wget -O sillyGirl ${GITHUBPROXY}https://github.com/cdle/sillyGirl/releases/download/main/sillyGirl_linux_amd64
 fi
-if [ ! -f $CODE_DIR/dev.go ]; then
-  echo "远程获取dev.go失败，从备份恢复"
-  cd $CODE_DIR && cp dev.go.bak dev.go
+if [ ! -f $CODE_DIR/sillyGirl ]; then
+  echo "远程获取sillyGirl失败，从备份恢复"
+  cd $CODE_DIR && cp sillyGirl.bak sillyGirl
 fi
 
 
