@@ -1,4 +1,4 @@
-FROM golang:alpine
+FROM alpine:latest
 
 COPY ./docker-entrypoint.sh /bin/
 
