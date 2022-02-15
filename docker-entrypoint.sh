@@ -16,21 +16,18 @@ else
   echo "未启用 goproxy 加速"
 fi
 
+if ! type wget  >/dev/null 2>&1; then
+  echo "正在安装wget..."
+  apt update && apt install wget -y
+else 
+  echo "wget已安装"
+fi
 
 if [ "$ENABLE_GITHUBPROXY" = "true" ]; then
    GITHUBPROXY=https://gh.52mss.cf/
    echo "启用 github 加速 ${GITHUBPROXY}"
 else
   echo "未启用 github 加速"
-fi
-
-
-if [ "$ENABLE_APKPROXY" = "true" ]; then
-  sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
-  echo "启用 alpine APK 加速 mirrors.aliyun.com"
-else
-  sed -i 's/mirrors.aliyun.com/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
-  echo "未启用 alpine APK 加速"
 fi
 
 
