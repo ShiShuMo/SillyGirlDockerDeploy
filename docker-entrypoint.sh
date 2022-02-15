@@ -16,12 +16,9 @@ else
   echo "未启用 goproxy 加速"
 fi
 
-if ! type wget  >/dev/null 2>&1; then
-  echo "正在安装wget..."
-  apt update && apt install wget -y
-else 
-  echo "wget已安装"
-fi
+ echo "正在安装musl和glibc..."
+ mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
+
 
 if [ "$ENABLE_GITHUBPROXY" = "true" ]; then
    GITHUBPROXY=https://gh.52mss.cf/
@@ -48,7 +45,7 @@ fi
 
 
 echo "启动"
-  ./sillyGirl -d
+  ./sillyGirl
 
 echo -e "=================== 启动完毕，如果第一次配置机器人，请手动以前台模式启动 ==================="
 
