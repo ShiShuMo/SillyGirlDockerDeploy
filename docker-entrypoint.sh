@@ -19,13 +19,23 @@ fi
  echo "正在安装musl和glibc..."
  mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 
-
 if [ "$ENABLE_GITHUBPROXY" = "true" ]; then
    GITHUBPROXY=https://gh.52mss.cf/
    echo "启用 github 加速 ${GITHUBPROXY}"
 else
   echo "未启用 github 加速"
 fi
+
+if [ "$ENABLE_APKPROXY" = "true" ]; then
+  sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+  echo "启用 alpine APK 加速 mirrors.aliyun.com"
+else
+  sed -i 's/mirrors.aliyun.com/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
+  echo "未启用 alpine APK 加速"
+fi
+
+ echo "正在安装转换时区..."
+ apk update && apk add tzdata && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone
 
 
 if [ ! -f $CODE_DIR/sillyGirl ]; then
@@ -45,7 +55,7 @@ fi
 
 
 echo "启动"
-  ./sillyGirl
+  ./sillyGirl -d
 
 echo -e "=================== 启动完毕，如果第一次配置机器人，请手动以前台模式启动 ==================="
 
